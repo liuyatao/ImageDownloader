@@ -14,6 +14,7 @@ import org.springframework.lang.NonNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -147,7 +148,11 @@ public class Commond {
     public void download( String url, File destFile) throws IOException {
         logger.info("下载文件" + url + "\n");
         Request request = new Request.Builder().url(url).build();
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1000, TimeUnit.SECONDS)
+                .writeTimeout(1000, TimeUnit.SECONDS)
+                .readTimeout(1000, TimeUnit.SECONDS)
+                .build();
         Response response = client.newCall(request).execute();
         ResponseBody body = response.body();
         BufferedSource source = body.source();
@@ -186,7 +191,11 @@ public class Commond {
                 .post(requestBody)
                 .build();
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1000, TimeUnit.SECONDS)
+                .writeTimeout(1000, TimeUnit.SECONDS)
+                .readTimeout(1000, TimeUnit.SECONDS)
+                .build();
         Response response = client.newCall(request).execute();
         return response.body().string();
 
